@@ -91,6 +91,7 @@ export const Route = createFileRoute("/auth/organization")({
 });
 
 function Organization() {
+  const redirectTo = Route.useSearch({ select: (search) => search.redirectTo });
   const { data: organizations, isPending } = authClient.useListOrganizations();
   const hasOrganizations = (organizations?.length ?? 0) > 0;
   const isOauthPostLogin =
@@ -99,7 +100,7 @@ function Organization() {
       hasSignedOauthQuery(window.location.search));
 
   if (!isPending && !hasOrganizations && !isOauthPostLogin) {
-    return <Navigate replace to="/onboarding" />;
+    return <Navigate replace search={{ redirectTo }} to="/onboarding" />;
   }
 
   if (isPending || (!hasOrganizations && !isOauthPostLogin)) {
